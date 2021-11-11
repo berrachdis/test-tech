@@ -2,6 +2,7 @@ package adeo.leroymerlin.cdp.controller;
 
 import adeo.leroymerlin.cdp.domain.entity.Event;
 import adeo.leroymerlin.cdp.service.EventService;
+import adeo.leroymerlin.cdp.util.CommonConstantUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -20,7 +21,7 @@ import java.util.List;
 
 @RestController
 // it's preferable to specify the type of MediaType if all api produces the same type
-@RequestMapping(value = "/api/events", produces = MediaType.APPLICATION_JSON_VALUE)
+@RequestMapping(value = CommonConstantUtil.EVENT_BASE_ENDPOINT_PATH, produces = MediaType.APPLICATION_JSON_VALUE)
 public class EventController {
 
     private final EventService eventService;
@@ -37,7 +38,7 @@ public class EventController {
     }
 
     // Replace @RequestMapping with method GET by @GetMapping
-    @GetMapping("search/{query}")
+    @GetMapping(CommonConstantUtil.EVENT_FILTER_BY_QUERY_API_PATH)
     public ResponseEntity<? extends Object> findEvents(@PathVariable String query) {
         final List<Event> filteredEvents = eventService.getFilteredEvents(query);
         if (CollectionUtils.isEmpty(filteredEvents)) {
@@ -47,7 +48,7 @@ public class EventController {
     }
 
     // Replace @RequestMapping with method DELETE by @DeleteMapping
-    @DeleteMapping("{id}")
+    @DeleteMapping(CommonConstantUtil.EVENT_DELETE_BY_ID_PATH)
     public ResponseEntity<Void> deleteEvent(@PathVariable Long id) {
         final Integer isDeleted = this.eventService.delete(id);
         if (isDeleted == 1) {
@@ -58,7 +59,7 @@ public class EventController {
     }
 
     // Replace @RequestMapping with method DELETE by @PutMapping
-    @PutMapping("{id}")
+    @PutMapping(CommonConstantUtil.EVENT_UPDATE_BY_ID_PATH)
     public ResponseEntity<Void> updateEvent(@PathVariable Long id, @RequestBody Event event) {
         final boolean isUpdated = this.eventService.update(id, event);
         if (isUpdated) {
