@@ -1,10 +1,20 @@
 package adeo.leroymerlin.cdp;
 
-import javax.persistence.*;
+// IMPORTANT : Avoid import * from package javax.persistence.*;
+import javax.persistence.CascadeType;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.OneToMany;
+import java.io.Serializable;
 import java.util.Set;
 
 @Entity
-public class Event {
+public class Event implements Serializable {
+    private static final long serialVersionUID = -4697034977691400728L;
+
     @Id
     @GeneratedValue(strategy= GenerationType.AUTO)
     private Long id;
@@ -13,7 +23,7 @@ public class Event {
 
     private String imgUrl;
 
-    @OneToMany(fetch=FetchType.EAGER)
+    @OneToMany(cascade = {CascadeType.MERGE, CascadeType.REFRESH}, fetch= FetchType.LAZY)
     private Set<Band> bands;
 
     private Integer nbStars;

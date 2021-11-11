@@ -1,14 +1,19 @@
 package adeo.leroymerlin.cdp;
 
-import org.springframework.data.repository.Repository;
-import org.springframework.transaction.annotation.Transactional;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
 
-import java.util.List;
+// Replace Repository by JpaRepository and add @Repository and move @Transactional(readOnly = true) to EventService
+@Repository
+public interface EventRepository extends JpaRepository<Event, Long> {
 
-@Transactional(readOnly = true)
-public interface EventRepository extends Repository<Event, Long> {
+    /*
+        No needs to this because it already defined in the JpaRepository
+    */
+//    void delete(Long eventId);
 
-    void delete(Long eventId);
-
-    List<Event> findAllBy();
+    /*
+        It will not work if there is no criteria after By
+    */
+//    List<Event> findAll();
 }

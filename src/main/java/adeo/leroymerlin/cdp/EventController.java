@@ -1,12 +1,24 @@
 package adeo.leroymerlin.cdp;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
+import org.springframework.util.CollectionUtils;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+// IMPORTANT : Avoid import * from package org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/events")
+// it's preferable to specify the type of MediaType if all api produces the same type
+@RequestMapping(value = "/api/events", produces = MediaType.APPLICATION_JSON_VALUE)
 public class EventController {
 
     private final EventService eventService;
@@ -16,22 +28,40 @@ public class EventController {
         this.eventService = eventService;
     }
 
-    @RequestMapping(value = "/", method = RequestMethod.GET)
+    // Replace @RequestMapping with method GET by @GetMapping
+    @GetMapping
     public List<Event> findEvents() {
         return eventService.getEvents();
     }
 
-    @RequestMapping(value = "/search/{query}", method = RequestMethod.GET)
-    public List<Event> findEvents(@PathVariable String query) {
-        return eventService.getFilteredEvents(query);
+    // Replace @RequestMapping with method GET by @GetMapping
+    @GetMapping("search/{query}")
+    public ResponseEntity<? extends Object> findEvents(@PathVariable String query) {
+        final List<Event> filteredEvents = eventService.getFilteredEvents(query);
+        if (CollectionUtils.isEmpty(filteredEvents)) {
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok(filteredEvents);
     }
 
-    @RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
-    public void deleteEvent(@PathVariable Long id) {
-        eventService.delete(id);
+    // Replace @RequestMapping with method DELETE by @DeleteMapping
+    @DeleteMapping("{id}")
+    public ResponseEntity<Void> deleteEvent(@PathVariable Long id) {
+        final boolean isDeleted = this.eventService.delete(id);
+        if (isDeleted) {
+            return ResponseEntity.noContent().build();
+        } else {
+            return ResponseEntity.notFound().build();
+        }
     }
 
-    @RequestMapping(value = "/{id}", method = RequestMethod.PUT)
-    public void updateEvent(@PathVariable Long id, @RequestBody Event event) {
+    // Replace @RequestMapping with method DELETE by @PutMapping
+    @PutMapping("{id}")
+    public ResponseEntity<Void> updateEvent(@PathVariable Long id, @RequestBody Event event) {
+        final boolean isUpdated = this.eventService.update(id, event);
+        if (isUpdated) {
+            return ResponseEntity.noContent().build();
+        }
+        return ResponseEntity.notFound().build();
     }
 }

@@ -1,10 +1,19 @@
 package adeo.leroymerlin.cdp;
 
-import javax.persistence.*;
+// IMPORTANT : Avoid import * from package javax.persistence.*;
+import javax.persistence.CascadeType;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.OneToMany;
+import java.io.Serializable;
 import java.util.Set;
 
 @Entity
-public class Band {
+public class Band implements Serializable {
+    private static final long serialVersionUID = -4122679078930011065L;
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -12,7 +21,7 @@ public class Band {
 
     private String name;
 
-    @OneToMany(fetch=FetchType.EAGER)
+    @OneToMany(cascade = {CascadeType.MERGE, CascadeType.REFRESH}, fetch= FetchType.LAZY)
     private Set<Member> members;
 
     public Set<Member> getMembers() {
