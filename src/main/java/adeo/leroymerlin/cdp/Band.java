@@ -1,13 +1,17 @@
 package adeo.leroymerlin.cdp;
 
 // IMPORTANT : Avoid import * from package javax.persistence.*;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.OneToMany;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import java.io.Serializable;
 import java.util.Set;
 
@@ -21,7 +25,12 @@ public class Band implements Serializable {
 
     private String name;
 
-    @OneToMany(cascade = {CascadeType.MERGE, CascadeType.REFRESH}, fetch= FetchType.LAZY)
+    @JsonIgnore
+    @ManyToMany(mappedBy = "bands", fetch = FetchType.LAZY)
+    private Set<Event> events;
+
+    @ManyToMany(fetch= FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH})
+    @JoinTable(name = "band_members", joinColumns = @JoinColumn(name = "band_id"), inverseJoinColumns = @JoinColumn(name = "members_id"))
     private Set<Member> members;
 
     public Set<Member> getMembers() {
@@ -38,5 +47,13 @@ public class Band implements Serializable {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public Set<Event> getEvents() {
+        return events;
+    }
+
+    public void setEvents(Set<Event> events) {
+        this.events = events;
     }
 }

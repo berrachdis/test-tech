@@ -1,13 +1,16 @@
 package adeo.leroymerlin.cdp;
 
 // IMPORTANT : Avoid import * from package javax.persistence.*;
+
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.OneToMany;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import java.io.Serializable;
 import java.util.Set;
 
@@ -16,14 +19,15 @@ public class Event implements Serializable {
     private static final long serialVersionUID = -4697034977691400728L;
 
     @Id
-    @GeneratedValue(strategy= GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
     private String title;
 
     private String imgUrl;
 
-    @OneToMany(cascade = {CascadeType.MERGE, CascadeType.REFRESH}, fetch= FetchType.LAZY)
+    @ManyToMany(fetch= FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH})
+    @JoinTable(name = "event_bands", joinColumns = @JoinColumn(name = "event_id"), inverseJoinColumns = @JoinColumn(name = "bands_id"))
     private Set<Band> bands;
 
     private Integer nbStars;
