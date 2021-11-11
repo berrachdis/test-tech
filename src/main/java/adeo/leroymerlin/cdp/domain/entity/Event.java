@@ -1,4 +1,4 @@
-package adeo.leroymerlin.cdp;
+package adeo.leroymerlin.cdp.domain.entity;
 
 // IMPORTANT : Avoid import * from package javax.persistence.*;
 

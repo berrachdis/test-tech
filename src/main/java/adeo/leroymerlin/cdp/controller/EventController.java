@@ -1,5 +1,7 @@
-package adeo.leroymerlin.cdp;
+package adeo.leroymerlin.cdp.controller;
 
+import adeo.leroymerlin.cdp.domain.entity.Event;
+import adeo.leroymerlin.cdp.service.EventService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -47,8 +49,8 @@ public class EventController {
     // Replace @RequestMapping with method DELETE by @DeleteMapping
     @DeleteMapping("{id}")
     public ResponseEntity<Void> deleteEvent(@PathVariable Long id) {
-        final boolean isDeleted = this.eventService.delete(id);
-        if (isDeleted) {
+        final Integer isDeleted = this.eventService.delete(id);
+        if (isDeleted == 1) {
             return ResponseEntity.noContent().build();
         } else {
             return ResponseEntity.notFound().build();

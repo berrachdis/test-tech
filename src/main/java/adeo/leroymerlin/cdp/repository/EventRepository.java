@@ -1,5 +1,6 @@
-package adeo.leroymerlin.cdp;
+package adeo.leroymerlin.cdp.repository;
 
+import adeo.leroymerlin.cdp.domain.entity.Event;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
@@ -16,4 +17,5 @@ public interface EventRepository extends JpaRepository<Event, Long> {
         It will not work if there is no criteria after By
     */
 //    List<Event> findAll();
+    Integer deleteById(Long id);
 }

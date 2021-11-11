@@ -1,13 +1,17 @@
-package adeo.leroymerlin.cdp;
+package adeo.leroymerlin.cdp.service;
 
+import adeo.leroymerlin.cdp.domain.entity.Band;
+import adeo.leroymerlin.cdp.domain.entity.Event;
+import adeo.leroymerlin.cdp.domain.entity.Member;
+import adeo.leroymerlin.cdp.repository.EventRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 
+import javax.transaction.Transactional;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
@@ -39,14 +43,9 @@ public class EventService {
      * @param id represent the identifier of the event to delete
      * @return {@code true} if the given {@code id} exist, otherwise {@code false}
      */
-    public boolean delete(Long id) {
-        try {
-            eventRepository.delete(id);
-            return true;
-        } catch (EmptyResultDataAccessException ex) {
-            LOG.warn(ex.getMessage());
-            return false;
-        }
+    @Transactional
+    public Integer delete(Long id) {
+        return eventRepository.deleteById(id);
     }
 
     /**

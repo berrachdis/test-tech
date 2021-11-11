@@ -1,4 +1,4 @@
-package adeo.leroymerlin.cdp;
+package adeo.leroymerlin.cdp.domain.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
