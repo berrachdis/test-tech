@@ -8,10 +8,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
+import org.springframework.util.ObjectUtils;
 import org.springframework.util.StringUtils;
 
-import javax.transaction.Transactional;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
@@ -34,6 +35,7 @@ public class EventService {
      * Method used to retrieve all events from database
      * @return a {@literal List} of {@literal Event}
      */
+    @Transactional(readOnly = true)
     public List<Event> getEvents() {
         return eventRepository.findAll();
     }
@@ -55,8 +57,11 @@ public class EventService {
      * @return {@code true} if the given {@code id} exist, otherwise {@code false}
      */
     public boolean update(Long id, Event eventToUpdate) {
-        if (this.eventRepository.exists(id)) {
-            this.eventRepository.save(eventToUpdate);
+        final Event event = this.eventRepository.findOne(id);
+        if (!ObjectUtils.isEmpty(event)) {
+            event.setNbStars(eventToUpdate.getNbStars());
+            event.setComment(eventToUpdate.getComment());
+            this.eventRepository.save(event);
             return true;
         } else {
             LOG.warn(String.format("No event with id %s exists!", id));
@@ -69,6 +74,7 @@ public class EventService {
      * @param query the filter to apply on event's members
      * @return {@literal List<Event>}
      */
+    @Transactional(readOnly = true)
     public List<Event> getFilteredEvents(String query) {
         final List<Event> events = this.eventRepository.findAll();
         this.filterEventsByQuery(events, query);

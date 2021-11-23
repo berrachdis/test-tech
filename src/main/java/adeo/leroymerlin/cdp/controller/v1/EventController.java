@@ -1,4 +1,4 @@
-package adeo.leroymerlin.cdp.controller;
+package adeo.leroymerlin.cdp.controller.v1;
 
 import adeo.leroymerlin.cdp.domain.entity.Event;
 import adeo.leroymerlin.cdp.service.EventService;
@@ -9,8 +9,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -58,8 +58,8 @@ public class EventController {
         }
     }
 
-    // Replace @RequestMapping with method DELETE by @PutMapping
-    @PutMapping(CommonConstantUtil.EVENT_UPDATE_BY_ID_PATH)
+    // Replace @RequestMapping with method UPDATE by @PutMapping
+    @PatchMapping(CommonConstantUtil.EVENT_UPDATE_BY_ID_PATH)
     public ResponseEntity<Void> updateEvent(@PathVariable Long id, @RequestBody Event event) {
         final boolean isUpdated = this.eventService.update(id, event);
         if (isUpdated) {

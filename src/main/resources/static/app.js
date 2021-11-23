@@ -14,11 +14,11 @@ function EventService($http){
     };
 
     function deleteEvent(id){
-        return $http.delete('/api/events/' + id);
+        return $http.delete('/v1/api/events/' + id);
     }
 
     function getEvents(){
-        return $http.get('/api/events/')
+        return $http.get('/v1/api/events/')
             .then(getEventsComplete);
 
         function getEventsComplete(response){
@@ -27,7 +27,7 @@ function EventService($http){
     }
 
     function updateStars(event){
-        return $http.put('/api/events/' + event.id, event);
+        return $http.put('/v1/api/events/' + event.id, event);
     }
 }
 

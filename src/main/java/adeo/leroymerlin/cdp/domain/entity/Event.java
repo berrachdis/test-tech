@@ -12,6 +12,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import java.io.Serializable;
+import java.util.HashSet;
 import java.util.Set;
 
 @Entity
@@ -28,7 +29,7 @@ public class Event implements Serializable {
 
     @ManyToMany(fetch= FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH})
     @JoinTable(name = "event_bands", joinColumns = @JoinColumn(name = "event_id"), inverseJoinColumns = @JoinColumn(name = "bands_id"))
-    private Set<Band> bands;
+    private Set<Band> bands = new HashSet<>();
 
     private Integer nbStars;
 

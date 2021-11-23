@@ -13,6 +13,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import java.io.Serializable;
+import java.util.HashSet;
 import java.util.Set;
 
 @Entity
@@ -27,11 +28,11 @@ public class Band implements Serializable {
 
     @JsonIgnore
     @ManyToMany(mappedBy = "bands", fetch = FetchType.LAZY)
-    private Set<Event> events;
+    private Set<Event> events = new HashSet<>();
 
     @ManyToMany(fetch= FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH})
     @JoinTable(name = "band_members", joinColumns = @JoinColumn(name = "band_id"), inverseJoinColumns = @JoinColumn(name = "members_id"))
-    private Set<Member> members;
+    private Set<Member> members = new HashSet<>();
 
     public Set<Member> getMembers() {
         return members;

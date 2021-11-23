@@ -1,5 +1,6 @@
 spring.jpa:
-  hibernate.ddl-auto: ""
+  hibernate.ddl-auto: none
+
 spring:
   jpa:
     show-sql: true
